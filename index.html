@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCL 2025/26 — R16 Intelligence Study v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#06060e; --surface:#0c0c1c; --card:#10101f; --border:#1c1c35;
+    --accent:#e8c84a; --a2:#4aace8; --a3:#e84a7a;
+    --text:#d5d5ee; --muted:#666688;
+    --green:#4ae899; --red:#e84a4a; --orange:#e8944a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;overflow-x:hidden;}
+
+  header{padding:36px 40px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;position:relative;}
+  header::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--a2),var(--a3));}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:4px;line-height:1;background:linear-gradient(130deg,var(--accent),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+  .meta-r{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;}
+  .meta-r span{color:var(--accent);}
+
+  nav{display:flex;border-bottom:1px solid var(--border);padding:0 40px;}
+  .tab{padding:12px 22px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+  .panel{display:none;padding:28px 40px 40px;}
+  .panel.active{display:block;}
+
+  .stitle{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--accent);margin-bottom:4px;}
+  .sdesc{font-size:11px;color:var(--muted);margin-bottom:22px;font-style:italic;}
+
+  .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+  .tc{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s;}
+  .tc:hover{border-color:var(--muted);}
+  .tc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+  .tc.s::before{background:var(--green);}
+  .tc.a::before{background:var(--a2);}
+  .tc.b::before{background:var(--accent);}
+  .tc.c::before{background:var(--muted);}
+
+  .tname{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-bottom:2px;}
+  .tmeta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:10px;letter-spacing:1px;}
+  .prow{display:flex;align-items:center;margin-bottom:5px;gap:6px;}
+  .plabel{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);flex:0 0 52px;letter-spacing:1px;}
+  .pbar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .pinner{height:100%;border-radius:2px;}
+  .pval{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;flex:0 0 34px;text-align:right;}
+
+  .pills{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px;}
+  .pill{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:2px;border:1px solid;letter-spacing:.5px;}
+  .pg{color:var(--green);border-color:var(--green);background:rgba(74,232,153,.04);}
+  .pw{color:var(--accent);border-color:var(--accent);background:rgba(232,200,74,.04);}
+  .pb{color:var(--red);border-color:var(--red);background:rgba(232,74,74,.04);}
+  .pi{color:var(--a2);border-color:var(--a2);background:rgba(74,172,232,.04);}
+  .po{color:var(--orange);border-color:var(--orange);background:rgba(232,148,74,.04);}
+
+  .mc{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:20px;margin-bottom:14px;}
+  .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .mtitle{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;}
+  .mbadge{font-family:'IBM Plex Mono',monospace;font-size:8px;padding:3px 8px;border-radius:2px;letter-spacing:2px;border:1px solid;}
+  .be{color:var(--accent);border-color:var(--accent);background:rgba(232,200,74,.1);}
+  .bh{color:var(--a3);border-color:var(--a3);background:rgba(232,74,122,.1);}
+  .bs{color:var(--green);border-color:var(--green);background:rgba(74,232,153,.1);}
+  .bt{color:var(--a2);border-color:var(--a2);background:rgba(74,172,232,.1);}
+  .bo{color:var(--orange);border-color:var(--orange);background:rgba(232,148,74,.1);}
+
+  .vsg{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start;}
+  .vname{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:3px;}
+  .vstat{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:2px;line-height:1.5;}
+  .vdiv{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--border);text-align:center;padding-top:4px;}
+  .vadv{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;padding:2px 6px;border-radius:2px;margin-top:6px;}
+  .vpred{margin-top:12px;padding:10px 12px;background:rgba(255,255,255,.02);border-left:2px solid var(--border);font-size:11px;color:var(--muted);line-height:1.7;font-style:italic;}
+  .vpred strong{color:var(--text);font-style:normal;}
+
+  table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:10px;}
+  th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--accent);color:var(--accent);font-size:8px;letter-spacing:2px;text-transform:uppercase;}
+  td{padding:8px 10px;border-bottom:1px solid var(--border);}
+  tr:hover td{background:rgba(255,255,255,.02);}
+  .rn{color:var(--muted);font-size:9px;}
+  .tn{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;}
+  .ph{color:var(--green);font-weight:600;}
+  .pm{color:var(--accent);font-weight:600;}
+  .pl{color:var(--muted);}
+
+  .hlbox{background:rgba(232,200,74,.04);border:1px solid rgba(232,200,74,.18);border-radius:3px;padding:14px 18px;margin-bottom:18px;}
+  .hllabel{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:5px;}
+  .hltext{font-size:12px;color:var(--text);line-height:1.7;}
+
+  .bwrap{overflow-x:auto;padding-bottom:20px;}
+  .bracket{display:flex;min-width:900px;gap:4px;}
+  .bround{flex:1;display:flex;flex-direction:column;}
+  .rlabel{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-align:center;padding:8px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+  .bmatch{margin:6px 3px;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+  .bteam{padding:7px 10px;font-size:10px;font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+  .bteam:last-child{border-bottom:none;}
+  .bteam.seed{background:rgba(232,200,74,.04);}
+  .bpct{font-size:9px;font-weight:600;}
+
+  footer{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);padding:18px 40px;border-top:1px solid var(--border);line-height:1.9;}
+
+  ::-webkit-scrollbar{width:3px;height:3px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);}
+
+  @media(max-width:900px){.g4{grid-template-columns:1fr 1fr;}header{flex-direction:column;gap:8px;}}
+  @media(max-width:600px){.g4,.g2{grid-template-columns:1fr;}header,.panel,nav{padding-left:14px;padding-right:14px;}.logo{font-size:34px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">UCL 2025/26</div>
+    <div class="sub">Deep Intelligence — Round of 16 · v3 Fully Verified · 27 Feb 2026</div>
+  </div>
+  <div class="meta-r">
+    Draw confirmed: <span>27 FEB 2026</span> · Final: <span>30 MAY</span> · Puskás Aréna, Budapest<br>
+    First legs: <span>10–11 MAR</span> · Second legs: <span>17–18 MAR</span>
+  </div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="show('teams',this)">Teams</button>
+  <button class="tab" onclick="show('matchups',this)">R16 Matchups</button>
+  <button class="tab" onclick="show('bracket',this)">Bracket</button>
+  <button class="tab" onclick="show('probs',this)">Probabilities</button>
+</nav>
+
+<!-- ===== TEAMS ===== -->
+<div class="panel active" id="teams">
+  <div class="stitle">Team Intelligence Map</div>
+  <div class="sdesc">All 16 teams. Tier S/A/B/C. Key players from official UEFA registered squads only. Probabilities composite of LP form, xGD, squad depth, bracket path, UCL history.</div>
+
+  <div class="g4">
+
+    <!-- ARSENAL -->
+    <div class="tc s">
+      <div class="tname">Arsenal</div>
+      <div class="tmeta">LP #1 · 8W-0L · 23 goals, 4 conceded · Only perfect LP in UCL history</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:85%;background:var(--green)"></div></div><span class="pval" style="color:var(--green)">85%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:65%;background:var(--a2)"></div></div><span class="pval">65%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:45%;background:var(--accent)"></div></div><span class="pval">45%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:24%;background:var(--a3)"></div></div><span class="pval">24%</span></div>
+      <div class="pills">
+        <span class="pill pg">xGD +1.69/90</span>
+        <span class="pill pg">Raya · Saliba · Gabriel</span>
+        <span class="pill pg">Gyökeres 13 goals, hot in 2026</span>
+        <span class="pill pg">Saka · Martinelli · Eze · Madueke</span>
+        <span class="pill pw">Havertz knee injury still out</span>
+        <span class="pill pw">Quad in play — fatigue risk</span>
+        <span class="pill pb">No UCL title in DNA</span>
+      </div>
+    </div>
+
+    <!-- BAYERN -->
+    <div class="tc s">
+      <div class="tname">Bayern München</div>
+      <div class="tmeta">LP #2 · 7W-1L · 22 goals · Bundesliga cruising</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:80%;background:var(--green)"></div></div><span class="pval" style="color:var(--green)">80%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:60%;background:var(--a2)"></div></div><span class="pval">60%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:40%;background:var(--accent)"></div></div><span class="pval">40%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:17%;background:var(--a3)"></div></div><span class="pval">17%</span></div>
+      <div class="pills">
+        <span class="pill pg">Musiala returned from fibula fracture</span>
+        <span class="pill pg">Kane: goal/game in UCL</span>
+        <span class="pill pg">Olise · Luis Díaz · Gnabry</span>
+        <span class="pill pg">33 shots ≥0.2xG (most in UCL)</span>
+        <span class="pill pw">Davies still injury doubt</span>
+      </div>
+    </div>
+
+    <!-- LIVERPOOL -->
+    <div class="tc a">
+      <div class="tname">Liverpool</div>
+      <div class="tmeta">LP #3 · 6W-2L · Beat Real Madrid, Atletico, Galatasaray in LP</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:76%;background:var(--a2)"></div></div><span class="pval" style="color:var(--a2)">76%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:52%;background:var(--a2)"></div></div><span class="pval">52%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:30%;background:var(--accent)"></div></div><span class="pval">30%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:13%;background:var(--a3)"></div></div><span class="pval">13%</span></div>
+      <div class="pills">
+        <span class="pill pg">Salah · Wirtz · Ekitike in hot form</span>
+        <span class="pill pg">Isak signed (£125m from Newcastle)</span>
+        <span class="pill pg">Szoboszlai + Mac Allister engine</span>
+        <span class="pill pg">Frimpong overlapping threat</span>
+        <span class="pill pw">Van Dijk + Konaté = thin CB cover behind</span>
+        <span class="pill pb">Diogo Jota died July 2025 (retired no.20)</span>
+      </div>
+    </div>
+
+    <!-- TOTTENHAM -->
+    <div class="tc b">
+      <div class="tname">Tottenham</div>
+      <div class="tmeta">LP #4 · 5W-1L-2D · Won Europa League 2024/25 · Now Tudor interim</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:30%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">30%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:12%;background:var(--muted)"></div></div><span class="pval">12%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:4%;background:var(--muted)"></div></div><span class="pval">4%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:1%;background:var(--muted)"></div></div><span class="pval">1%</span></div>
+      <div class="pills">
+        <span class="pill pg">Simons · Odobert · Pape Sarr creative</span>
+        <span class="pill pg">Kolo Muani (3 UCL goals) · Romero · Udogie</span>
+        <span class="pill pw">Thomas Frank sacked Feb 11</span>
+        <span class="pill pw">Igor Tudor interim — 16th in PL</span>
+        <span class="pill pb">Atletico R16 = nightmare draw</span>
+        <span class="pill pb">Bentancur + Ben Davies injured</span>
+      </div>
+    </div>
+
+    <!-- BARCELONA -->
+    <div class="tc a">
+      <div class="tname">FC Barcelona</div>
+      <div class="tmeta">LP #5 · 5W-2L-1D · Lamine Yamal running the show</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:52%;background:var(--a2)"></div></div><span class="pval" style="color:var(--a2)">52%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:28%;background:var(--accent)"></div></div><span class="pval">28%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:14%;background:var(--muted)"></div></div><span class="pval">14%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:7%;background:var(--muted)"></div></div><span class="pval">7%</span></div>
+      <div class="pills">
+        <span class="pill pg">Lamine Yamal — elite level</span>
+        <span class="pill pg">Lewandowski · Raphinha · Dani Olmo</span>
+        <span class="pill pg">Joan García GK impressing</span>
+        <span class="pill pb">Defense leaks vs quality</span>
+        <span class="pill pw">Away at SJP first leg</span>
+      </div>
+    </div>
+
+    <!-- CHELSEA -->
+    <div class="tc a">
+      <div class="tname">Chelsea</div>
+      <div class="tmeta">LP #6 · 5W-2L-1D · Club World Cup winners (beat PSG in final)</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:40%;background:var(--a2)"></div></div><span class="pval" style="color:var(--a2)">40%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:18%;background:var(--accent)"></div></div><span class="pval">18%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:8%;background:var(--muted)"></div></div><span class="pval">8%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:3%;background:var(--muted)"></div></div><span class="pval">3%</span></div>
+      <div class="pills">
+        <span class="pill pg">Beat PSG in Club WC final</span>
+        <span class="pill pg">Liam Rosenior era — young energy</span>
+        <span class="pill pw">Very inconsistent domestically</span>
+        <span class="pill pw">PSG revenge factor — Parc des Princes</span>
+        <span class="pill pb">Fofana discipline issues</span>
+      </div>
+    </div>
+
+    <!-- SPORTING CP -->
+    <div class="tc b">
+      <div class="tname">Sporting CP</div>
+      <div class="tmeta">LP #7 · Beat PSG in LP · Gyökeres sold to Arsenal summer 2025</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:52%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">52%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:22%;background:var(--accent)"></div></div><span class="pval">22%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:8%;background:var(--muted)"></div></div><span class="pval">8%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:2%;background:var(--muted)"></div></div><span class="pval">2%</span></div>
+      <div class="pills">
+        <span class="pill pg">Luis Suárez (Col, ex-Almería) impressing</span>
+        <span class="pill pg">Trincão · Hjulmand · Gonçalo Inácio</span>
+        <span class="pill pg">Alvalade 2nd leg advantage</span>
+        <span class="pill pw">Squad thinner without Gyökeres</span>
+        <span class="pill pw">Bodø chaos — Aspmyra is a beast</span>
+      </div>
+    </div>
+
+    <!-- MAN CITY -->
+    <div class="tc a">
+      <div class="tname">Man City</div>
+      <div class="tmeta">LP #8 · 5W-2L-1D · Beat Real Madrid 2-1 in LP · Rodri back</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:50%;background:var(--a2)"></div></div><span class="pval" style="color:var(--a2)">50%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:27%;background:var(--accent)"></div></div><span class="pval">27%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:14%;background:var(--muted)"></div></div><span class="pval">14%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:7%;background:var(--muted)"></div></div><span class="pval">7%</span></div>
+      <div class="pills">
+        <span class="pill pg">Donnarumma (GK from PSG)</span>
+        <span class="pill pg">Rodri returned · Reijnders · Foden</span>
+        <span class="pill pg">O'Reilly · Khusanov young generation</span>
+        <span class="pill pg">Marmoush + Haaland strike threat</span>
+        <span class="pill pw">Haaland cold (4G last 12 before Bernabéu)</span>
+        <span class="pill pb">Away leg at Bernabéu — historically brutal</span>
+      </div>
+    </div>
+
+    <!-- REAL MADRID -->
+    <div class="tc a">
+      <div class="tname">Real Madrid</div>
+      <div class="tmeta">LP #9 via playoffs · Beat Benfica 3-1 agg in playoff · Mbappé UCL top scorer 13G</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:50%;background:var(--a2)"></div></div><span class="pval" style="color:var(--a2)">50%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:27%;background:var(--accent)"></div></div><span class="pval">27%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:15%;background:var(--muted)"></div></div><span class="pval">15%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:8%;background:var(--a3)"></div></div><span class="pval">8%</span></div>
+      <div class="pills">
+        <span class="pill pg">Mbappé (13 UCL goals, UCL top scorer)</span>
+        <span class="pill pg">Vinicius Jr · Bellingham · Courtois</span>
+        <span class="pill pg">Mastantuono (18yo) · Arda Güler emerging</span>
+        <span class="pill pg">Bernabéu 2nd leg home advantage</span>
+        <span class="pill pb">City beat them 2-1 in LP · Conceded 4-2 to Benfica in LP</span>
+        <span class="pill pw">Injury-hit season throughout</span>
+      </div>
+    </div>
+
+    <!-- PSG -->
+    <div class="tc b">
+      <div class="tname">PSG</div>
+      <div class="tmeta">Defending UCL champs · Intercontinental Cup winners · LP #11</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:58%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">58%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:36%;background:var(--accent)"></div></div><span class="pval">36%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:22%;background:var(--accent)"></div></div><span class="pval">22%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:10%;background:var(--a3)"></div></div><span class="pval">10%</span></div>
+      <div class="pills">
+        <span class="pill pg">Kvaratskhelia · Dembélé · Doué · Barcola</span>
+        <span class="pill pg">Vitinha · Zaire-Emery · João Neves mid</span>
+        <span class="pill pg">Hakimi · Marquinhos defensive class</span>
+        <span class="pill pw">LP 11th — shaky group stage</span>
+        <span class="pill pw">No Mbappé (at Real) · No Donnarumma (at City)</span>
+        <span class="pill pw">Lost Club WC final to Chelsea · revenge mode</span>
+      </div>
+    </div>
+
+    <!-- NEWCASTLE -->
+    <div class="tc b">
+      <div class="tname">Newcastle Utd</div>
+      <div class="tmeta">LP #12 · Playoff: beat Qarabag 9-3 agg (Gordon 4G first leg)</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:48%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">48%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:20%;background:var(--accent)"></div></div><span class="pval">20%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:8%;background:var(--muted)"></div></div><span class="pval">8%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:3%;background:var(--muted)"></div></div><span class="pval">3%</span></div>
+      <div class="pills">
+        <span class="pill pg">St James' Park first leg</span>
+        <span class="pill pg">Tonali · Bruno · Gordon · Wissa</span>
+        <span class="pill pg">Thiaw · Botman · Trippier back fit</span>
+        <span class="pill pw">Sold Isak to Liverpool £125m</span>
+        <span class="pill pw">Strikers: Wissa · Woltemade · Osula</span>
+        <span class="pill pb">Barca away in Camp Nou return</span>
+      </div>
+    </div>
+
+    <!-- ATLETICO -->
+    <div class="tc b">
+      <div class="tname">Atletico Madrid</div>
+      <div class="tmeta">LP #14 · Playoff: beat Brugge 7-4 agg · Sørloth hat-trick decisive</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:68%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">68%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:34%;background:var(--accent)"></div></div><span class="pval">34%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:16%;background:var(--muted)"></div></div><span class="pval">16%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:7%;background:var(--a3)"></div></div><span class="pval">7%</span></div>
+      <div class="pills">
+        <span class="pill pg">Simeone UCL fortress system</span>
+        <span class="pill pg">Sørloth in form (hat-trick vs Brugge)</span>
+        <span class="pill pg">Oblak · Le Normand · Giménez</span>
+        <span class="pill pg">Lookman · Griezmann support</span>
+        <span class="pill po">Alvarez cold LaLiga (0 in 13) · subbed 58' · Simeone tension</span>
+        <span class="pill pw">Alvarez to Barcelona rumours distracting</span>
+        <span class="pill pi">Best bracket half — Tottenham R16 winnable</span>
+      </div>
+    </div>
+
+    <!-- ATALANTA -->
+    <div class="tc c">
+      <div class="tname">Atalanta</div>
+      <div class="tmeta">LP #15 · Playoff: beat BVB 5-2 agg · 4-1 first leg</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:22%;background:var(--muted)"></div></div><span class="pval">22%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:9%;background:var(--muted)"></div></div><span class="pval">9%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:3%;background:var(--muted)"></div></div><span class="pval">3%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:1%;background:var(--muted)"></div></div><span class="pval">&lt;1%</span></div>
+      <div class="pills">
+        <span class="pill pg">Gasperini press + chaos</span>
+        <span class="pill pg">Smashed BVB 4-1</span>
+        <span class="pill pb">Bayern Munich R16 — enormous quality gap</span>
+        <span class="pill pw">Can't sustain 180min at this level</span>
+      </div>
+    </div>
+
+    <!-- LEVERKUSEN -->
+    <div class="tc c">
+      <div class="tname">Bayer Leverkusen</div>
+      <div class="tmeta">LP #16 · Playoff: scraped past Olympiacos · Lost to them in LP</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:14%;background:var(--muted)"></div></div><span class="pval">14%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:5%;background:var(--muted)"></div></div><span class="pval">5%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:1%;background:var(--muted)"></div></div><span class="pval">1%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:0%;background:var(--muted)"></div></div><span class="pval">&lt;1%</span></div>
+      <div class="pills">
+        <span class="pill pb">Arsenal R16 — least winnable tie in competition</span>
+        <span class="pill pb">Lost to Olympiacos in LP · dour form</span>
+        <span class="pill pw">Schick leading line · limited xG creation</span>
+      </div>
+    </div>
+
+    <!-- GALATASARAY -->
+    <div class="tc c">
+      <div class="tname">Galatasaray</div>
+      <div class="tmeta">LP #20 · Playoff: beat Juventus (aet) · Beat Liverpool 1-0 in LP</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:24%;background:var(--muted)"></div></div><span class="pval">24%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:9%;background:var(--muted)"></div></div><span class="pval">9%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:3%;background:var(--muted)"></div></div><span class="pval">3%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:1%;background:var(--muted)"></div></div><span class="pval">&lt;1%</span></div>
+      <div class="pills">
+        <span class="pill pg">Osimhen — elite centre-forward threat</span>
+        <span class="pill pg">Beat Liverpool 1-0 in LP</span>
+        <span class="pill pw">10pts · lucky qualifier</span>
+        <span class="pill pb">Defense 36th xGA — concedes constantly</span>
+        <span class="pill pb">Now face Liverpool · Anfield 2nd leg</span>
+      </div>
+    </div>
+
+    <!-- BODO/GLIMT -->
+    <div class="tc c">
+      <div class="tname">Bodø/Glimt</div>
+      <div class="tmeta">Playoff: beat Inter 5-2 agg · Also beat Atletico + Man City in LP</div>
+      <div class="prow"><span class="plabel">QF</span><div class="pbar"><div class="pinner" style="width:48%;background:var(--accent)"></div></div><span class="pval" style="color:var(--accent)">48%</span></div>
+      <div class="prow"><span class="plabel">SF</span><div class="pbar"><div class="pinner" style="width:14%;background:var(--muted)"></div></div><span class="pval">14%</span></div>
+      <div class="prow"><span class="plabel">FINAL</span><div class="pbar"><div class="pinner" style="width:4%;background:var(--muted)"></div></div><span class="pval">4%</span></div>
+      <div class="prow"><span class="plabel">TITLE</span><div class="pbar"><div class="pinner" style="width:1%;background:var(--muted)"></div></div><span class="pval">&lt;1%</span></div>
+      <div class="pills">
+        <span class="pill pg">Høgh · Hauge · Evjen — giant-killer trio</span>
+        <span class="pill pg">Norwegian offseason = fresh and sharp</span>
+        <span class="pill pg">Squad €60m value — massively outpunching</span>
+        <span class="pill pb">Defense: 36th xGA in UCL · concedes in bunches</span>
+        <span class="pill pb">Aspmyra capacity 8,300 — home leg first</span>
+        <span class="pill pi">The fairytale run of the tournament</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MATCHUPS ===== -->
+<div class="panel" id="matchups">
+  <div class="stitle">Round of 16 — Matchup Analysis</div>
+  <div class="sdesc">First legs hosted by the unseeded team. Second legs at the higher-ranked (seeded) team. First legs 10–11 March · Second legs 17–18 March.</div>
+
+  <!-- Real Madrid vs Man City -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Real Madrid vs Manchester City</div><span class="mbadge be">TIE OF THE ROUND</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Real Madrid</div>
+        <div class="vstat">LP 9th (via playoffs) · Benfica 3-1 agg in KO playoff</div>
+        <div class="vstat">Mbappé: UCL top scorer 13G · Vinicius Jr back · Courtois</div>
+        <div class="vstat">Bellingham · Arda Güler · Mastantuono (18yo) emerging</div>
+        <div class="vstat">⚠ City beat them 2-1 in LP · Conceded 4-2 to Benfica in LP</div>
+        <div class="vstat">✓ Bernabéu 2nd leg · Historically decisive in UCL</div>
+        <span class="vadv" style="background:rgba(232,200,74,.1);color:var(--accent)">~52% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Man City</div>
+        <div class="vstat">LP 8th · Beat Real Madrid 2-1 in LP (December)</div>
+        <div class="vstat">Donnarumma GK · Rodri back · Reijnders · Foden</div>
+        <div class="vstat">Marmoush + Haaland strike options · Guéhi + Semenyo in Jan</div>
+        <div class="vstat">⚠ Haaland cold recently · Bernabéu 2nd leg massive obstacle</div>
+        <div class="vstat">⚠ Young squad, first time many face this pressure</div>
+        <span class="vadv" style="background:rgba(74,172,232,.1);color:var(--a2)">~48% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      Six of the last seven seasons these two have collided in the knockouts. City won at the Bernabéu in December — a massive result — but the second leg at that ground under UCL pressure is a completely different test. Mbappé has 13 UCL goals this season; he's at his best on the biggest nights. Haaland has looked cold recently, but Marmoush gives Guardiola an alternative. <strong>Madrid's Bernabéu home second leg is the decisive factor. Expect 1-1 or 2-1 across legs, slight Madrid edge.</strong>
+    </div>
+  </div>
+
+  <!-- Leverkusen vs Arsenal -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Bayer Leverkusen vs Arsenal</div><span class="mbadge be">MOST ASYMMETRIC TIE</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Leverkusen</div>
+        <div class="vstat">LP 16th · Scraped past Olympiacos 0-0 agg in playoffs</div>
+        <div class="vstat">Lost to Olympiacos in LP · Dour, defensive shape</div>
+        <div class="vstat">Schick leading line · Grimaldo · Andrich · Badé</div>
+        <div class="vstat">⚠ Very limited xG generation · No cutting edge</div>
+        <span class="vadv" style="background:rgba(100,100,120,.1);color:var(--muted)">14% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Arsenal</div>
+        <div class="vstat">LP 1st — only perfect record (8W) in UCL history · xGD +1.69/90</div>
+        <div class="vstat">Gyökeres 13 goals — 8 in last 12, genuinely hitting form</div>
+        <div class="vstat">Raya · Saliba · Gabriel — elite defensive unit</div>
+        <div class="vstat">Saka · Martinelli · Eze · Madueke width dominance</div>
+        <div class="vstat">⚠ Havertz still out (knee) · Rotation across four comps</div>
+        <span class="vadv" style="background:rgba(74,232,153,.1);color:var(--green)">86% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      The clearest mismatch in the draw. Arsenal were the only team to post a perfect LP record in UCL history. Leverkusen qualified by scraping past a Olympiacos side they'd already lost to. Gyökeres' ongoing adaptation to the Premier League actually makes him well-suited for UCL nights against a sitting block — he can run in behind. The only real question is whether Arsenal rotate aggressively enough that Leverkusen nick a goal at the BayArena first leg. <strong>Arsenal through, probably 3-0 to 4-1 on aggregate.</strong>
+    </div>
+  </div>
+
+  <!-- PSG vs Chelsea -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">PSG vs Chelsea</div><span class="mbadge bh">REVENGE NARRATIVE</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">PSG</div>
+        <div class="vstat">Defending UCL + Intercontinental Cup holders · LP 11th</div>
+        <div class="vstat">Kvaratskhelia · Dembélé · Doué · Barcola · Gonçalo Ramos</div>
+        <div class="vstat">Vitinha · Zaire-Emery · João Neves engine room</div>
+        <div class="vstat">Hakimi · Marquinhos · Lucas Hernandez defensive core</div>
+        <div class="vstat">GKs: Chevalier + Safonov (no Donnarumma — he's at City)</div>
+        <div class="vstat">⚠ Shaky LP (11th) · Lost Club WC final to Chelsea</div>
+        <span class="vadv" style="background:rgba(232,200,74,.1);color:var(--accent)">58% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Chelsea</div>
+        <div class="vstat">LP 6th · Won Club World Cup (beat PSG in final)</div>
+        <div class="vstat">Rosenior era · Very young, talented squad</div>
+        <div class="vstat">⚠ Wildly inconsistent in PL · Fofana discipline issues</div>
+        <div class="vstat">⚠ Away at Parc des Princes first (PSG are seeded)</div>
+        <span class="vadv" style="background:rgba(74,172,232,.1);color:var(--a2)">42% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      PSG lost the Club World Cup final to Chelsea and that stings. This is a motivated PSG in their own backyard. Kvaratskhelia is devastating in transition and the Parc des Princes atmosphere is a weapon. Chelsea have shown they can beat elite sides — they proved that against PSG in the Club WC final — but they need to keep it clean away first. <strong>PSG home advantage and revenge motivation tips it. 58–42 PSG.</strong>
+    </div>
+  </div>
+
+  <!-- Galatasaray vs Liverpool -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Galatasaray vs Liverpool</div><span class="mbadge bt">TRAP GAME WARNING</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Galatasaray</div>
+        <div class="vstat">LP 20th with 10pts · Beat Liverpool 1-0 in LP · Beat Juventus in playoffs</div>
+        <div class="vstat">Osimhen — world-class striker, still dangerous</div>
+        <div class="vstat">Rams Park (Ali Sami Yen) electric European atmosphere</div>
+        <div class="vstat">⚠ Defense: constantly leaking (36th xGA in UCL)</div>
+        <div class="vstat">⚠ Lucky to be here — form was inconsistent throughout</div>
+        <span class="vadv" style="background:rgba(100,100,120,.1);color:var(--muted)">22% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Liverpool</div>
+        <div class="vstat">LP 3rd · Beaten Real, Atletico, Inter · On fire domestically</div>
+        <div class="vstat">Salah · Wirtz · Ekitike · Isak attack depth</div>
+        <div class="vstat">Mac Allister · Gravenberch · Szoboszlai engine</div>
+        <div class="vstat">Frimpong + Kerkez athletic fullback dynamism</div>
+        <div class="vstat">⚠ Gala beat them 1-0 in LP (Istanbul) — must not underestimate</div>
+        <span class="vadv" style="background:rgba(74,232,153,.1);color:var(--green)">78% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      The RAMS Park first leg is genuinely dangerous. Istanbul under lights against Galatasaray has claimed big victims before (just ask Liverpool fans about 1999). Osimhen is capable of anything on a big night. But Liverpool's forward line is historically deep right now — Salah, Wirtz, Ekitike, Isak — and Anfield's second leg should be a comfortable close-out. <strong>Liverpool progress, but probably drop a goal in Istanbul. 3-1 on aggregate.</strong>
+    </div>
+  </div>
+
+  <!-- Newcastle vs Barcelona -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Newcastle vs FC Barcelona</div><span class="mbadge bs">GENUINE 50/50</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Newcastle</div>
+        <div class="vstat">LP 12th · Playoff: 9-3 agg vs Qarabag (Gordon 4G first leg)</div>
+        <div class="vstat">St James' Park first leg — one of Europe's great UCL atmospheres</div>
+        <div class="vstat">Tonali · Bruno Guimarães · Wissa · Gordon</div>
+        <div class="vstat">Trippier · Botman (back fit) · Thiaw defensive solidity</div>
+        <div class="vstat">⚠ Sold Isak to Liverpool · Strikers: Wissa, Woltemade, Osula</div>
+        <span class="vadv" style="background:rgba(232,200,74,.1);color:var(--accent)">48% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">FC Barcelona</div>
+        <div class="vstat">LP 5th · Away at SJP first — hostile draw</div>
+        <div class="vstat">Lamine Yamal (possibly best player in the world right now)</div>
+        <div class="vstat">Lewandowski · Raphinha · Dani Olmo · Fermin López</div>
+        <div class="vstat">Koundé · Cubarsí · Balde · Joan García</div>
+        <div class="vstat">⚠ Defense leaky vs physical teams · Cubarsí still young</div>
+        <span class="vadv" style="background:rgba(74,172,232,.1);color:var(--a2)">52% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      Newcastle have to be considered genuine threats at SJP. They've knocked out tougher sides than Barcelona on their own ground before (Inter 1997, for the old heads). Without Isak, their strike depth is thinner, but Gordon and Wissa on the break can hurt Barca's leaky defense. Lamine Yamal is the wildcard — one moment of genius changes everything. Camp Nou second leg is where Barca should pull clear. <strong>The most genuinely open tie of the round. Edge Barca on quality, but Newcastle could easily be 2-0 up after SJP.</strong>
+    </div>
+  </div>
+
+  <!-- Atletico vs Tottenham -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Atletico Madrid vs Tottenham</div><span class="mbadge bo">SIMEONE FORTRESS</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Atletico Madrid</div>
+        <div class="vstat">LP 14th · Playoff: beat Brugge 7-4 — Sørloth hat-trick sealed it</div>
+        <div class="vstat">Sørloth in form · Oblak · Le Normand · Giménez · Koke</div>
+        <div class="vstat">Lookman + Griezmann support around Sørloth</div>
+        <div class="vstat">⚠ Álvarez: 0 LaLiga goals in 13 games · Simeone subbed him 58'</div>
+        <div class="vstat">⚠ Álvarez–Simeone tension palpable · Barcelona transfer rumours</div>
+        <span class="vadv" style="background:rgba(232,200,74,.1);color:var(--accent)">70% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Tottenham</div>
+        <div class="vstat">LP 4th (seeded) · Won Europa League 2024/25 (beat Man Utd)</div>
+        <div class="vstat">Thomas Frank sacked Feb 11 · Igor Tudor interim since Feb 14</div>
+        <div class="vstat">Simons · Odobert · Kolo Muani (3 UCL goals) · Richarlison</div>
+        <div class="vstat">Romero · Van de Ven · Udogie · Vicario</div>
+        <div class="vstat">⚠ 16th in PL · Mid-chaos domestically · Manager disruption</div>
+        <div class="vstat">⚠ Bentancur + Ben Davies injured · Brennan Johnson sold to Palace</div>
+        <span class="vadv" style="background:rgba(100,100,120,.1);color:var(--muted)">30% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      Atletico are built for exactly this tie. Simeone's Metropolitano block is nearly impossible to unpick and Tottenham arrive in maximum chaos — new interim manager, 16th in the PL, key injuries, squad disruption. Tudor does have a reputation for short-term stabilisation (did it at Lazio, Juventus) and European nights can focus a dressing room. But Sørloth is in form and Álvarez, whatever his domestic woes, has an incredible UCL goals-per-game record (0.67). <strong>Atletico advance. Tottenham's only hope: early away goal at the Metropolitano — which would be very Spurs.</strong>
+    </div>
+  </div>
+
+  <!-- Atalanta vs Bayern -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Atalanta vs Bayern München</div><span class="mbadge be">QUALITY GAP</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Atalanta</div>
+        <div class="vstat">LP 15th · Playoff: beat BVB 5-2 agg (4-1 in first leg)</div>
+        <div class="vstat">Gasperini high-press · Gewiss Stadium first leg hostile</div>
+        <div class="vstat">⚠ Their best result (4-1 BVB) may have masked structural limitations</div>
+        <div class="vstat">⚠ Can't sustain pressing intensity for 180 UCL mins vs elite</div>
+        <span class="vadv" style="background:rgba(100,100,120,.1);color:var(--muted)">20% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Bayern München</div>
+        <div class="vstat">LP 2nd · 22 goals · 33 shots ≥0.2 xG (most in UCL)</div>
+        <div class="vstat">Musiala returned from fibula fracture — the creative glue</div>
+        <div class="vstat">Kane · Olise · Luis Díaz · Gnabry · Pavlović</div>
+        <div class="vstat">Kimmich · Tah · Upamecano · Kim structural spine</div>
+        <div class="vstat">✓ Bundesliga title comfortable — rest + rotation possible</div>
+        <span class="vadv" style="background:rgba(74,232,153,.1);color:var(--green)">80% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      Atalanta will give Bayern a torrid 45 minutes at the Gewiss and the Bergamo crowd will be incredible. But Bayern's squad depth is simply on a different level. Musiala's return changes everything — he's the player who unlocks teams that sit deep. Kane's UCL record at Bayern is elite. <strong>Bayern through comfortably. Atalanta might nick a first-leg goal but the tie is over by the Allianz Arena return.</strong>
+    </div>
+  </div>
+
+  <!-- Bodo/Glimt vs Sporting -->
+  <div class="mc">
+    <div class="mh"><div class="mtitle">Bodø/Glimt vs Sporting CP</div><span class="mbadge bs">THE CHAOS TIE</span></div>
+    <div class="vsg">
+      <div>
+        <div class="vname">Bodø/Glimt</div>
+        <div class="vstat">Beat Inter 5-2 agg in playoffs · Also beat Atletico + Man City in LP</div>
+        <div class="vstat">Høgh (top scorer) · Hauge · Evjen — the three-headed threat</div>
+        <div class="vstat">Norwegian offseason: playing UCL in their own off-season — rested</div>
+        <div class="vstat">Squad valued at €60m vs Sporting's €464m — outrageous overperform</div>
+        <div class="vstat">⚠ Defense: 36th xGA in UCL · 310 opp touches in box (worst)</div>
+        <div class="vstat">⚠ Aspmyra holds 8,300 — Sporting's squad is superior on paper</div>
+        <span class="vadv" style="background:rgba(232,200,74,.1);color:var(--accent)">48% advance</span>
+      </div>
+      <div class="vdiv">VS</div>
+      <div style="text-align:right">
+        <div class="vname">Sporting CP</div>
+        <div class="vstat">LP 7th · Beat PSG in LP · Consistent throughout</div>
+        <div class="vstat">Luis Suárez (Colombian, ex-Almería) — replacing Gyökeres, impressing</div>
+        <div class="vstat">Trincão · Daniel Bragança · Hjulmand · Gonçalo Inácio</div>
+        <div class="vstat">Alvalade Stadium 2nd leg advantage — seeded</div>
+        <div class="vstat">⚠ A different proposition without Gyökeres (now at Arsenal)</div>
+        <span class="vadv" style="background:rgba(74,172,232,.1);color:var(--a2)">52% advance</span>
+      </div>
+    </div>
+    <div class="vpred">
+      The tie nobody knows how to call. Bodø beat Inter twice, Atletico, Man City — their giant-killing is systematic, not lucky. They're rested (Norwegian off-season), sharp from friendlies, and play a direct counter system that exploits defensive mistakes. But Sporting are a well-organized side and their replacement for Gyökeres, Luis Suárez, has actually impressed. The Alvalade second leg gives Sporting genuine structural advantage. <strong>Sporting should advance, but expect a 5+ goal aggregate, multiple twists, and Høgh or Hauge doing something that goes viral.</strong>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== BRACKET ===== -->
+<div class="panel" id="bracket">
+  <div class="stitle">Bracket — Full Predetermined Path</div>
+  <div class="sdesc">From R16 onwards the bracket is fully set. Teams know their complete potential path to Budapest. Final: 30 May 2026 · Puskás Aréna, Budapest.</div>
+
+  <div class="g2" style="margin-bottom:20px">
+    <div class="hlbox">
+      <div class="hllabel">HALF A — Relatively Open</div>
+      <div class="hltext">
+        <strong style="color:var(--green)">Arsenal · Sporting/Bodø · PSG/Chelsea · Liverpool/Gala</strong><br><br>
+        Arsenal and Liverpool cannot meet before the Final. The path: Arsenal beat Leverkusen → face Sporting or Bodø in QF. Liverpool beat Gala → face PSG or Chelsea in QF. An Arsenal vs Liverpool Final is structurally possible and would be historic.
+      </div>
+    </div>
+    <div class="hlbox" style="border-color:rgba(232,74,122,.2);background:rgba(232,74,122,.03)">
+      <div class="hllabel" style="color:var(--a3)">HALF B — The Meat Grinder</div>
+      <div class="hltext">
+        <strong style="color:var(--a3)">Newcastle/Barca · Atletico/Tottenham · Bayern · Real/City</strong><br><br>
+        Real Madrid or Man City exits at the QF. Bayern face that survivor in the SF. Atletico (if they navigate Spurs) could meet Barca or Newcastle in QF — both winnable. The winner of this half will have earned it.
+      </div>
+    </div>
+  </div>
+
+  <div class="bwrap">
+    <div class="bracket">
+      <div class="bround">
+        <div class="rlabel">ROUND OF 16</div>
+        <div class="bmatch">
+          <div class="bteam seed"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Arsenal</span><span class="bpct" style="color:var(--green)">86%</span></div>
+          <div class="bteam"><span>🇩🇪 Leverkusen</span><span class="bpct" style="color:var(--muted)">14%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam seed"><span>🇵🇹 Sporting CP</span><span class="bpct" style="color:var(--accent)">52%</span></div>
+          <div class="bteam"><span>🇳🇴 Bodø/Glimt</span><span class="bpct" style="color:var(--accent)">48%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam seed"><span>🇫🇷 PSG</span><span class="bpct" style="color:var(--accent)">58%</span></div>
+          <div class="bteam"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Chelsea</span><span class="bpct" style="color:var(--a2)">42%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam seed"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Liverpool</span><span class="bpct" style="color:var(--green)">78%</span></div>
+          <div class="bteam"><span>🇹🇷 Galatasaray</span><span class="bpct" style="color:var(--muted)">22%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam seed"><span>🇪🇸 Barcelona</span><span class="bpct" style="color:var(--a2)">52%</span></div>
+          <div class="bteam"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Newcastle</span><span class="bpct" style="color:var(--accent)">48%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam"><span>🏴󠁧󠁢󠁴󠁯󠁴󠁿 Tottenham</span><span class="bpct" style="color:var(--muted)">30%</span></div>
+          <div class="bteam seed"><span>🇪🇸 Atletico Mad.</span><span class="bpct" style="color:var(--accent)">70%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam"><span>🇮🇹 Atalanta</span><span class="bpct" style="color:var(--muted)">20%</span></div>
+          <div class="bteam seed"><span>🇩🇪 Bayern Munich</span><span class="bpct" style="color:var(--green)">80%</span></div>
+        </div>
+        <div class="bmatch">
+          <div class="bteam"><span>🇪🇸 Real Madrid</span><span class="bpct" style="color:var(--accent)">52%</span></div>
+          <div class="bteam seed"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Man City</span><span class="bpct" style="color:var(--a2)">48%</span></div>
+        </div>
+      </div>
+
+      <div class="bround">
+        <div class="rlabel">QF · 7–15 APRIL</div>
+        <div class="bmatch" style="margin-top:2px">
+          <div class="bteam"><span style="color:var(--green)">Arsenal →</span><span class="bpct" style="color:var(--green)">~75%</span></div>
+          <div class="bteam"><span style="color:var(--muted)">Sporting or Bodø</span><span class="bpct">~25%</span></div>
+        </div>
+        <div class="bmatch" style="margin-top:32px">
+          <div class="bteam"><span>PSG or Chelsea</span><span class="bpct">~44%</span></div>
+          <div class="bteam"><span style="color:var(--a2)">Liverpool →</span><span class="bpct" style="color:var(--a2)">~56%</span></div>
+        </div>
+        <div class="bmatch" style="margin-top:32px">
+          <div class="bteam"><span>Barca or Newcastle</span><span class="bpct">~42%</span></div>
+          <div class="bteam"><span style="color:var(--accent)">Atletico →</span><span class="bpct" style="color:var(--accent)">~58%</span></div>
+        </div>
+        <div class="bmatch" style="margin-top:32px">
+          <div class="bteam"><span style="color:var(--green)">Bayern →</span><span class="bpct" style="color:var(--green)">~62%</span></div>
+          <div class="bteam"><span>Real or City</span><span class="bpct">~38%</span></div>
+        </div>
+      </div>
+
+      <div class="bround">
+        <div class="rlabel">SF · 28 APR–6 MAY</div>
+        <div class="bmatch" style="margin-top:30px">
+          <div class="bteam"><span style="color:var(--green)">Arsenal</span><span class="bpct" style="color:var(--green)">58%</span></div>
+          <div class="bteam"><span style="color:var(--a2)">Liverpool</span><span class="bpct">42%</span></div>
+        </div>
+        <div class="bmatch" style="margin-top:90px">
+          <div class="bteam"><span style="color:var(--accent)">Atletico</span><span class="bpct">36%</span></div>
+          <div class="bteam"><span style="color:var(--green)">Bayern</span><span class="bpct" style="color:var(--green)">64%</span></div>
+        </div>
+      </div>
+
+      <div class="bround">
+        <div class="rlabel">FINAL · 30 MAY BUDAPEST</div>
+        <div style="margin-top:60px">
+          <div class="bmatch">
+            <div class="bteam" style="background:rgba(74,232,153,.05)"><span style="color:var(--green)">ARSENAL — Most Likely</span><span class="bpct" style="color:var(--green)">~55%</span></div>
+            <div class="bteam"><span style="color:var(--muted)">Bayern / Liverpool / Atletico</span><span class="bpct">~45%</span></div>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);padding:8px 10px;line-height:1.7;">
+            Puskás Aréna · Budapest · 30 May 2026 · 21:00 CET
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROBABILITIES ===== -->
+<div class="panel" id="probs">
+  <div class="stitle">Title Probabilities</div>
+  <div class="sdesc">Composite of: LP record + xGD/90 + verified squad news + bracket position + UCL history + domestic form + current injuries.</div>
+
+  <div class="g2" style="margin-bottom:20px">
+    <div class="hlbox">
+      <div class="hllabel">Top Pick — Arsenal 24%</div>
+      <div class="hltext">Gyökeres finally hitting form (13 goals, 8 in last 12). Perfect LP — historically unprecedented. Best defensive record. Leverkusen R16 is near-bye. Bracket half is the easier one. Biggest risk: four-competition fatigue and a team with no UCL title DNA.</div>
+    </div>
+    <div class="hlbox" style="border-color:rgba(74,172,232,.25);background:rgba(74,172,232,.03)">
+      <div class="hllabel" style="color:var(--a2)">Best Value — Atletico 7%</div>
+      <div class="hltext">Face Tottenham in disarray (16th PL, interim manager) → then Barca or Newcastle → potentially PSG or Liverpool in SF. Simeone has reached UCL finals before. Sørloth in form. Only real risk: Álvarez situation boiling over before March.</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Team</th><th>R16 Adv.</th><th>QF</th><th>SF</th><th>Final</th><th>Title</th><th>Key swing factor</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="rn">1</td><td class="tn">ARSENAL</td><td class="ph">86%</td><td class="ph">74%</td><td class="ph">64%</td><td class="ph">45%</td><td class="ph">24%</td><td style="font-size:9px;color:var(--muted)">Gyökeres form holds + no injury crisis</td></tr>
+      <tr><td class="rn">2</td><td class="tn">BAYERN</td><td class="ph">80%</td><td class="pm">62%</td><td class="pm">58%</td><td class="pm">40%</td><td class="pm">17%</td><td style="font-size:9px;color:var(--muted)">Musiala fitness sustained through knockouts</td></tr>
+      <tr><td class="rn">3</td><td class="tn">LIVERPOOL</td><td class="ph">78%</td><td class="pm">56%</td><td class="pm">50%</td><td class="pm">30%</td><td class="pm">13%</td><td style="font-size:9px;color:var(--muted)">Salah + Ekitike staying clinical</td></tr>
+      <tr><td class="rn">4</td><td class="tn">PSG</td><td class="pm">58%</td><td class="pm">36%</td><td class="pm">34%</td><td class="pm">22%</td><td class="pm">10%</td><td style="font-size:9px;color:var(--muted)">Kvara consistent against PL physicality</td></tr>
+      <tr><td class="rn">5</td><td class="tn">REAL MADRID</td><td class="pm">52%</td><td class="pm">28%</td><td class="pm">26%</td><td class="pm">15%</td><td class="pm">8%</td><td style="font-size:9px;color:var(--muted)">Mbappé on a big night + Bernabéu magic</td></tr>
+      <tr><td class="rn">6</td><td class="tn">MAN CITY</td><td class="pm">48%</td><td class="pm">26%</td><td class="pm">24%</td><td class="pm">14%</td><td class="pm">7%</td><td style="font-size:9px;color:var(--muted)">Haaland returning to form + Rodri back</td></tr>
+      <tr><td class="rn">7</td><td class="tn">ATLETICO</td><td class="pm">70%</td><td class="pm">42%</td><td class="pl">18%</td><td class="pl">14%</td><td class="pl">7%</td><td style="font-size:9px;color:var(--muted)">Álvarez situation resolves + Simeone system</td></tr>
+      <tr><td class="rn">8</td><td class="tn">BARCELONA</td><td class="pm">52%</td><td class="pm">26%</td><td class="pl">13%</td><td class="pl">7%</td><td class="pl">5%</td><td style="font-size:9px;color:var(--muted)">Yamal masterclass + defense tightens</td></tr>
+      <tr><td class="rn">9</td><td class="tn">SPORTING CP</td><td class="pm">52%</td><td class="pl">22%</td><td class="pl">9%</td><td class="pl">4%</td><td class="pl">2%</td><td style="font-size:9px;color:var(--muted)">Suárez stepping up further</td></tr>
+      <tr><td class="rn">10</td><td class="tn">CHELSEA</td><td class="pl">42%</td><td class="pl">18%</td><td class="pl">8%</td><td class="pl">4%</td><td class="pl">2%</td><td style="font-size:9px;color:var(--muted)">Discipline + big-game focus</td></tr>
+      <tr><td class="rn">11</td><td class="tn">NEWCASTLE</td><td class="pl">48%</td><td class="pl">20%</td><td class="pl">8%</td><td class="pl">3%</td><td class="pl">2%</td><td style="font-size:9px;color:var(--muted)">SJP atmosphere carrying them through</td></tr>
+      <tr><td class="rn">12</td><td class="tn">BODØ/GLIMT</td><td class="pl">48%</td><td class="pl">14%</td><td class="pl">4%</td><td class="pl">1%</td><td class="pl">&lt;1%</td><td style="font-size:9px;color:var(--muted)">Høgh/Hauge giant-killing continues</td></tr>
+      <tr><td class="rn">13</td><td class="tn">GALATASARAY</td><td class="pl">22%</td><td class="pl">8%</td><td class="pl">3%</td><td class="pl">1%</td><td class="pl">&lt;1%</td><td style="font-size:9px;color:var(--muted)">Osimhen miracle run</td></tr>
+      <tr><td class="rn">14</td><td class="tn">TOTTENHAM</td><td class="pl">30%</td><td class="pl">10%</td><td class="pl">3%</td><td class="pl">1%</td><td class="pl">&lt;1%</td><td style="font-size:9px;color:var(--muted)">Tudor bounce + away goal at Metropolitano</td></tr>
+      <tr><td class="rn">15</td><td class="tn">ATALANTA</td><td class="pl">20%</td><td class="pl">7%</td><td class="pl">2%</td><td class="pl">&lt;1%</td><td class="pl">&lt;1%</td><td style="font-size:9px;color:var(--muted)">Gasperini chaos + Bayern off night</td></tr>
+      <tr><td class="rn">16</td><td class="tn">LEVERKUSEN</td><td class="pl">14%</td><td class="pl">4%</td><td class="pl">1%</td><td class="pl">&lt;1%</td><td class="pl">&lt;1%</td><td style="font-size:9px;color:var(--muted)">Arsenal complete implosion (not happening)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <strong style="color:var(--accent)">v3 — Fully verified 27 Feb 2026</strong><br>
+  Major corrections from v1/v2: Gyökeres is at Arsenal (sold summer 2025 for €63.5m+); Sporting replaced him with Luis Suárez (Colombian, ex-Almería, impressing); no cross-contamination between ties; Donnarumma is at Man City (not still at PSG); PSG GKs are Chevalier + Safonov; Liverpool's Isak was signed from Newcastle for £125m; Newcastle sold Isak — strikers now Wissa, Woltemade, Osula; Thomas Frank sacked Spurs Feb 11, Igor Tudor appointed interim Feb 14; Tottenham won Europa League 2024/25 under Postecoglou (beat Man Utd); Atletico playoff: Sørloth hat-trick was decisive vs Brugge (not Álvarez); Álvarez at 0 LaLiga goals in 13 games; Bodø top scorers Høgh + Hauge + Evjen (not Hauge alone); Bodo/Glimt beat Inter, Atletico AND Man City in LP; Mbappé UCL top scorer with 13 goals.<br>
+  Sources: UEFA.com official squad pages · Arsenal.com · Liverpool FC official · Man City official · Tottenham official (R16 squad) · Sky Sports · ESPN · Al Jazeera · Infobae · FotMob · Wikipedia season articles.
+</footer>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
